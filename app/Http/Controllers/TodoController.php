@@ -6,14 +6,18 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
+use App\Repositories\TodoRepository;
 use App\Services\TodoService;
 
 class TodoController extends Controller
 {
     protected TodoService $todoService;
-    public function __construct(TodoService $todoService)
+    protected TodoRepository $todoRepository;
+
+    public function __construct(TodoService $todoService, TodoRepository $todoRepository)
     {
         $this->todoService = $todoService;
+        $this->todoRepository = $todoRepository;
     }
     /**
      * Display a listing of the resource.
@@ -27,30 +31,40 @@ class TodoController extends Controller
 
     public function index(Request $request)
     {
-        $query = Todo::query();
+        // $query = Todo::query();
 
-        if ($request->search) {
+        // if ($request->search) {
 
-            $query->where('title', 'like', '%' . $request->search . '%');
+        //     $query->where('title', 'like', '%' . $request->search . '%');
 
-        }
+        // }
 
-        if ($request->status == 'completed') {
+        // if ($request->status == 'completed') {
 
-            $query->where('is_completed', true);
+        //     $query->where('is_completed', true);
 
-        }
+        // }
 
-        if ($request->status == 'pending') {
+        // if ($request->status == 'pending') {
 
-            $query->where('is_completed', false);
+        //     $query->where('is_completed', false);
 
-        }
+        // }
 
-        $todos = $query
-            ->latest()
-            ->paginate(5)
-            ->withQueryString();
+        // $todos = $query
+        //     ->latest()
+        //     ->paginate(5)
+        //     ->withQueryString();
+
+        // return view('todos.index', compact('todos'));
+
+        $todos = $this->todoRepository
+            ->paginateWithFilter(
+                $request->only([
+                    'search',
+                    'status',
+                ])
+            );
 
         return view('todos.index', compact('todos'));
     }

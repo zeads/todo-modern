@@ -11,4 +11,14 @@ class Todo extends Model
         'description',
         'is_completed'
     ];
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('is_completed', true);
+    }
+
+    public function scopePending($query)
+    {
+        return $query->where('is_completed', false);
+    }
 }
