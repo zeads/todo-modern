@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTodoRequest;
+use App\Http\Requests\UpdateTodoRequest;
+use App\Services\TodoService;
 
 class TodoController extends Controller
 {
+    protected TodoService $todoService;
+    public function __construct(TodoService $todoService)
+    {
+        $this->todoService = $todoService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -58,14 +66,19 @@ class TodoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'nullable',
-        ]);
+    // public function store(Request $request)
+    // {
+        // $validated = $request->validate([
+            //     'title' => 'required|max:255',
+            //     'description' => 'nullable',
+            // ]);
 
-        Todo::create($validated);
+            // Todo::create($validated);
+
+    public function store(StoreTodoRequest $request)
+    {
+        // Todo::create($request->validated());
+        $this->todoService->create($request->validated());
 
         return redirect()
             ->route('todos.index')
@@ -92,17 +105,22 @@ class TodoController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(Request $request, Todo $todo)
+    // public function update(Request $request, Todo $todo)
+    // {
+        //     $validated = $request->validate([
+            //         'title' => 'required|max:255',
+            //         'description' => 'nullable',
+            //     ]);
+            // $validated['is_completed'] = $request->has('is_completed');
+            // $todo->update($validated);
+
+    public function update(UpdateTodoRequest $request, Todo $todo)
     {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'nullable',
-        ]);
+        $data = $request->validated();
+        $data['is_completed'] = $request->has('is_completed');
 
-        $validated['is_completed'] =
-            $request->has('is_completed');
-
-        $todo->update($validated);
+        // $todo->update($data);
+        $this->todoService->update($todo, $data);
 
         return redirect()
             ->route('todos.index')
@@ -114,7 +132,8 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        $todo->delete();
+        // $todo->delete();
+        $this->todoService->delete($todo);
 
         return redirect()
             ->route('todos.index')

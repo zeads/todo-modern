@@ -123,6 +123,10 @@
 
     @endforeach
 
+    <div class="mt-5">
+        {{ $todos->links() }}
+    </div>
+
 </div>
 
 @endsection
