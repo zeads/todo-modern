@@ -12,6 +12,11 @@ class Todo extends Model
         'is_completed'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function scopeCompleted($query)
     {
         return $query->where('is_completed', true);
