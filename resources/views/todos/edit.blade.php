@@ -1,6 +1,8 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
-@section('content')
+@section('content') --}}
+
+<x-app-layout>
 
 <div class="bg-white p-6 rounded shadow">
 
@@ -77,4 +79,5 @@
 
 </div>
 
-@endsection
+</x-app-layout>
+{{-- @endsection --}}

@@ -1,6 +1,8 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
-@section('content')
+@section('content') --}}
+
+<x-app-layout>
 
 @if ($errors->any())
 
@@ -56,4 +58,5 @@
 
 </div>
 
-@endsection
+</x-app-layout>
+{{-- @endsection --}}

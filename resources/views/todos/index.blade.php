@@ -1,135 +1,141 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
-@section('content')
+@section('content') --}}
 
-<form method="GET"
-      action="{{ route('todos.index') }}"
-      class="mb-5">
+<x-app-layout>
+    <div class="mb-5">
+       <p>Hallo, {{ auth()->user()->name }}.</p>
+       <p>Jumlah todo: {{ auth()->user()->todos()->count() }}</p>
+    </div>
+    <form method="GET"
+        action="{{ route('todos.index') }}"
+        class="mb-5">
 
-    <input type="text"
-           name="search"
-           value="{{ request('search') }}"
-           placeholder="Cari todo..."
-           class="border rounded px-3 py-2">
-
-    <select name="status"
+        <input type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Cari todo..."
             class="border rounded px-3 py-2">
 
-        <option value="">
-            Semua
-        </option>
+        <select name="status"
+                class="border rounded px-3 py-2">
 
-        <option value="completed"
-            {{ request('status') == 'completed' ? 'selected' : '' }}>
+            <option value="">
+                Semua
+            </option>
 
-            Selesai
+            <option value="completed"
+                {{ request('status') == 'completed' ? 'selected' : '' }}>
 
-        </option>
+                Selesai
 
-        <option value="pending"
-            {{ request('status') == 'pending' ? 'selected' : '' }}>
+            </option>
 
-            Belum Selesai
+            <option value="pending"
+                {{ request('status') == 'pending' ? 'selected' : '' }}>
 
-        </option>
+                Belum Selesai
 
-    </select>
+            </option>
 
-    <button class="bg-gray-800 text-white px-4 py-2 rounded">
-        Search
-    </button>
+        </select>
 
-</form>
+        <button class="bg-gray-800 text-white px-4 py-2 rounded">
+            Search
+        </button>
 
-@if (session('success'))
+    </form>
 
-    {{-- <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
-        {{ session('success') }}
-    </div> --}}
-    <x-alert>
-        {{ session('success') }}
-    </x-alert>
+    @if (session('success'))
 
-@endif
+        {{-- <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div> --}}
+        <x-alert>
+            {{ session('success') }}
+        </x-alert>
+
+    @endif
 
 
 
-<div class="bg-white p-6 rounded shadow">
+    <div class="bg-white p-6 rounded shadow">
 
-    <div class="flex justify-between mb-5">
-        <h1 class="text-2xl font-bold">
-            Todo List
-        </h1>
+        <div class="flex justify-between mb-5">
+            <h1 class="text-2xl font-bold">
+                Todo List
+            </h1>
 
-        <a href="{{ route('todos.create') }}"
-           class="bg-blue-500 text-white px-4 py-2 rounded">
-            Tambah Todo
-        </a>
-    </div>
+            <a href="{{ route('todos.create') }}"
+            class="bg-blue-500 text-white px-4 py-2 rounded">
+                Tambah Todo
+            </a>
+        </div>
 
-    @foreach ($todos as $todo)
+        @foreach ($todos as $todo)
 
-        <div class="border-b py-4">
+            <div class="border-b py-4">
 
-            <h2 class="font-semibold text-lg">
-                {{ $todo->title }}
-            </h2>
+                <h2 class="font-semibold text-lg">
+                    {{ $todo->title }}
+                </h2>
 
-            <p class="text-gray-600">
-                {{ $todo->description }}
-            </p>
+                <p class="text-gray-600">
+                    {{ $todo->description }}
+                </p>
 
-            <div class="flex gap-2 mt-3">
+                <div class="flex gap-2 mt-3">
 
-                <a href="{{ route('todos.edit', $todo->id) }}"
-                class="bg-yellow-500 text-white px-3 py-1 rounded">
+                    <a href="{{ route('todos.edit', $todo->id) }}"
+                    class="bg-yellow-500 text-white px-3 py-1 rounded">
 
-                    Edit
+                        Edit
 
-                </a>
+                    </a>
 
-                <form action="{{ route('todos.destroy', $todo->id) }}"
-                    method="POST">
+                    <form action="{{ route('todos.destroy', $todo->id) }}"
+                        method="POST">
 
-                    @csrf
-                    @method('DELETE')
+                        @csrf
+                        @method('DELETE')
 
-                    <button class="bg-red-500 text-white px-3 py-1 rounded">
-                        Delete
-                    </button>
+                        <button class="bg-red-500 text-white px-3 py-1 rounded">
+                            Delete
+                        </button>
 
-                </form>
+                    </form>
 
-                <div class="mt-2">
+                    <div class="mt-2">
 
-                    @if ($todo->is_completed)
+                        @if ($todo->is_completed)
 
-                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">
-                            Selesai
-                        </span>
+                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-sm">
+                                Selesai
+                            </span>
 
-                    @else
+                        @else
 
-                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-sm">
-                            Belum Selesai
-                        </span>
+                            <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-sm">
+                                Belum Selesai
+                            </span>
 
-                    @endif
+                        @endif
 
+                    </div>
                 </div>
+
+
             </div>
 
 
+
+        @endforeach
+
+        <div class="mt-5">
+            {{ $todos->links() }}
         </div>
 
-
-
-    @endforeach
-
-    <div class="mt-5">
-        {{ $todos->links() }}
     </div>
 
-</div>
-
-@endsection
+</x-app-layout>
+{{-- @endsection --}}

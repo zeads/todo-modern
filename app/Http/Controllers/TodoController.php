@@ -8,6 +8,7 @@ use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Repositories\TodoRepository;
 use App\Services\TodoService;
+use Illuminate\Support\Facades\Gate;
 
 class TodoController extends Controller
 {
@@ -112,6 +113,10 @@ class TodoController extends Controller
      */
     public function edit(Todo $todo)
     {
+        // $this->authorize('update', $todo); //authorize ini sudah tidak dipakai di laravel 11 keatas gantinya Gate
+
+        Gate::authorize('update', $todo);
+
         return view('todos.edit', compact('todo'));
     }
 
@@ -134,6 +139,8 @@ class TodoController extends Controller
         $data['is_completed'] = $request->has('is_completed');
 
         // $todo->update($data);
+
+        Gate::authorize('update', $todo);
         $this->todoService->update($todo, $data);
 
         return redirect()
@@ -147,6 +154,8 @@ class TodoController extends Controller
     public function destroy(Todo $todo)
     {
         // $todo->delete();
+
+        Gate::authorize('delete', $todo);
         $this->todoService->delete($todo);
 
         return redirect()

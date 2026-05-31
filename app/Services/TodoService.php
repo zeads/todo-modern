@@ -8,7 +8,8 @@ class TodoService
 {
     public function create(array $data): Todo
     {
-        return Todo::create($data);
+        // return Todo::create($data);
+        return auth()->user()->todos()->create($data);
     }
 
     public function update(Todo $todo, array $data): Todo

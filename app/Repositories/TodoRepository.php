@@ -11,7 +11,9 @@ class TodoRepository
         array $filters,
     ): LengthAwarePaginator
     {
-        $query = Todo::query();
+        // $query = Todo::query();
+        $query = auth()->user()->todos()->getQuery();
+
         if(!empty($filters['search'])) {
             $query->where(
                 'title',
