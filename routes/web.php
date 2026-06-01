@@ -1,5 +1,7 @@
 <?php
 
+// use App\Http\Controllers\Api\AuthController;
+// use App\Http\Controllers\Api\TodoController as ApiTodoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +23,4 @@ Route::middleware('auth')->group(function () {
 Route::resource('todos', TodoController::class)->middleware('auth');
 
 require __DIR__.'/auth.php';
+
